@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang='vi'>
+<head>
+  <meta charset="UTF-8">
+  <title>BÀI TẬP</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; margin: 20px; color: #333; }
+    .container { max-width: 900px; margin: auto; background: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .top-row { display: flex; justify-content: flex-end; }
+    .score-box {
+       border: 2px solid red;
+       width: 150px;
+       height: 50px;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       background: #fff;
+       color: red;
+       font-weight: bold;
+       margin-bottom: 10px;
+    }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { font-size: 2.5em; margin: 0; }
+    .header h2 { font-size: 1.2em; color: #777; margin-top: 5px; }
+    .section { margin-top: 30px; }
+    .section h2 { margin-bottom: 10px; }
+    .question { margin-left: 1em; margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background: #fafafa; }
+    .question p { margin: 0 0 10px; }
+    .option { margin-left: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    td, th { border: 1px solid #ddd; padding: 8px; }
+    button { background: #4285f4; color: #fff; border: none; padding: 10px 15px; font-size: 1em; cursor: pointer; border-radius: 3px; }
+    button:hover { background: #307cf1; }
+    input[type='text'], select { padding: 5px; font-size: 1em; }
+  </style>
+</head>
+<body>
+  <div class='container'>
+    <div class='top-row'>
+       <div class='score-box' id='scoreDisplay'>Tổng số điêm:</div>
+    </div>
+    <div class='header'>
+      <h1>BÀI TẬP THÀNH PHẦN CẤU TẠO NGUYÊN TỬ</h1>
+      <h2>(HÓA HỌC ABC)</h2>
+    </div>
+    <div class='section' id='part1'>
+      <h2>Phần 1: Trắc nghiệm nhiều lựa chọn (có một phương án đúng)</h2>
+      <div class='question' id='part1_q1'>
+        <p><strong>Câu 1:</strong> Ai là người tìm ra electron?</p>
+        <div class='option'><label><input type='radio' name='part1_q1' value='A'> <strong>A.</strong> John Dalton.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q1' value='B'> <strong>B.</strong> Joseph John Thomson.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q1' value='C'> <strong>C.</strong> Ernest Rutherford.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q1' value='D'> <strong>D.</strong> James Chadwick.</label></div>
+        <div class='explanation' id='part1_q1_result' data-answer='B'></div>
+      </div>
+      <div class='question' id='part1_q2'>
+        <p><strong>Câu 2:</strong> Ai là người phát hiện ra nguyên tử có cấu tạo rỗng với hạt nhân mang điện tích dương nằm ở trung tâm của nguyên tử?</p>
+        <div class='option'><label><input type='radio' name='part1_q2' value='A'> <strong>A.</strong> John Dalton.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q2' value='B'> <strong>B.</strong> Joseph John Thomson.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q2' value='C'> <strong>C.</strong> Ernest Rutherford.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q2' value='D'> <strong>D.</strong> James Chadwick.</label></div>
+        <div class='explanation' id='part1_q2_result' data-answer='C'></div>
+      </div>
+      <div class='question' id='part1_q3'>
+        <p><strong>Câu 3:</strong> Các hạt cấu tạo nên hạt nhân của hầu hết nguyên tử là?</p>
+        <div class='option'><label><input type='radio' name='part1_q3' value='A'> <strong>A.</strong> electron, proton và neutron.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q3' value='B'> <strong>B.</strong> electron và neutron.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q3' value='C'> <strong>C.</strong> proton và neutron.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q3' value='D'> <strong>D.</strong> electron và proton.</label></div>
+        <div class='explanation' id='part1_q3_result' data-answer='C'></div>
+      </div>
+      <div class='question' id='part1_q4'>
+        <p><strong>Câu 4:</strong> Hạt mang điện trong hạt nhân nguyên tử là</p>
+        <div class='option'><label><input type='radio' name='part1_q4' value='A'> <strong>A.</strong> Electron.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q4' value='B'> <strong>B.</strong> Proton.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q4' value='C'> <strong>C.</strong> Neutron.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q4' value='D'> <strong>D.</strong> Neutron và electron.</label></div>
+        <div class='explanation' id='part1_q4_result' data-answer='B'></div>
+      </div>
+      <div class='question' id='part1_q5'>
+        <p><strong>Câu 5:</strong> Trong nguyên tử, hạt mang điện là</p>
+        <div class='option'><label><input type='radio' name='part1_q5' value='A'> <strong>A.</strong> Electron.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q5' value='B'> <strong>B.</strong> Electron và neutron.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q5' value='C'> <strong>C.</strong> Proton và neutron.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q5' value='D'> <strong>D.</strong> Proton và electron.</label></div>
+        <div class='explanation' id='part1_q5_result' data-answer='D'></div>
+      </div>
+      <div class='question' id='part1_q6'>
+        <p><strong>Câu 6:</strong> Ta biết, nguyên tử luôn trung hoà về điện nên</p>
+        <div class='option'><label><input type='radio' name='part1_q6' value='A'> <strong>A.</strong> số hạt proton = số hạt neutron.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q6' value='B'> <strong>B.</strong> số hạt electron = số hạt neutron.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q6' value='C'> <strong>C.</strong> số hạt electron = số hạt proton.</label></div>
+        <div class='option'><label><input type='radio' name='part1_q6' value='D'> <strong>D.</strong> số hạt proton = số hạt electron = số hạt neutron.</label></div>
+        <div class='explanation' id='part1_q6_result' data-answer='C'></div>
+      </div>
+    </div>
+    <div class='section' id='part2'>
+      <h2>Phần 2: Trắc nghiệm nhiều lựa chọn (có thể có một hoặc nhiều đáp án đúng)</h2>
+      <div class='question' id='part2_q1'>
+        <p><strong>Câu 1:</strong> Nhận định đúng khi nói về electron nguyên tử?</p>
+        <div class='option'><label><input type='checkbox' name='part2_q1' value='A'> <strong>A.</strong> Electron là hạt mang điện âm.</label></div>
+        <div class='option'><label><input type='checkbox' name='part2_q1' value='B'> <strong>B.</strong> Electron chuyển động quanh hạt nhân theo quỹ đạo xác định.</label></div>
+        <div class='option'><label><input type='checkbox' name='part2_q1' value='C'> <strong>C.</strong> Vỏ nguyên tử được cấu tạo từ các hạt electron.</label></div>
+        <div class='option'><label><input type='checkbox' name='part2_q1' value='D'> <strong>D.</strong> Khối lượng electron lớn hơn khối lượng của proton và neutron.</label></div>
+        <div class='explanation' id='part2_q1_result' data-answer='A,C'></div>
+      </div>
+      <div class='question' id='part2_q2'>
+        <p><strong>Câu 2:</strong> Nhận định đúng khi nói về hạt nhân nguyên tử?</p>
+        <div class='option'><label><input type='checkbox' name='part2_q2' value='A'> <strong>A.</strong> Hạt nhân gồm proton, neutron và electron.</label></div>
+        <div class='option'><label><input type='checkbox' name='part2_q2' value='B'> <strong>B.</strong> Hạt nhân gồm proton và neutron.</label></div>
+        <div class='option'><label><input type='checkbox' name='part2_q2' value='C'> <strong>C.</strong> Hạt nhân trung hòa về điện.</label></div>
+        <div class='option'><label><input type='checkbox' name='part2_q2' value='D'> <strong>D.</strong> Khối lượng nguyên tử hầu như tập trung vào hạt nhân nguyên tử.</label></div>
+        <div class='explanation' id='part2_q2_result' data-answer='B,D'></div>
+      </div>
+      <div class='question' id='part2_q3'>
+        <p><strong>Câu 3:</strong> Nếu hạt nhân nguyên tử có Z hạt proton thì</p>
+        <div class='option'><label><input type='checkbox' name='part2_q3' value='A'> <strong>A.</strong> số đơn vị điện tích hạt nhân là Z.</label></div>
+        <div class='option'><label><input type='checkbox' name='part2_q3' value='B'> <strong>B.</strong> điện tích hạt nhân là Z+.</label></div>
+        <div class='option'><label><input type='checkbox' name='part2_q3' value='C'> <strong>C.</strong> số hạt neutron là Z.</label></div>
+        <div class='option'><label><input type='checkbox' name='part2_q3' value='D'> <strong>D.</strong> tổng số hạt mang điện trong nguyên tử là 2Z.</label></div>
+        <div class='explanation' id='part2_q3_result' data-answer='A,B,D'></div>
+      </div>
+    </div>
+    <div class='section' id='part3'>
+      <h2>Phần 3: Trắc nghiệm trả lời ngắn</h2>
+      <div class='question' id='part3_q1'>
+        <p><strong>Câu 1:</strong> Nguyên tử helium có 2 proton và 2 neutron. Cho khối lượng: m<sub>e</sub> = 0,00055u; m<sub>n</sub> ≈ m<sub>p</sub> ≈ 1u. Hãy xác định % khối lượng các electron trong nguyên tử helium. (Làm tròn đến số thập phân thứ hai)</p>
+        <div>Đáp án của bạn: <input type='text' id='part3_q1_input'></div>
+        <div class='explanation' id='part3_q1_result' data-answer='0,03'></div>
+      </div>
+      <div class='question' id='part3_q2'>
+        <p><strong>Câu 2:</strong> Tổng số hạt proton, neutron và electron trong nguyên tử của nguyên tố X là 10, trong đó số hạt không mang điện là 4. Xác định số electron có trong X.</p>
+        <div>Đáp án của bạn: <input type='text' id='part3_q2_input'></div>
+        <div class='explanation' id='part3_q2_result' data-answer='3'></div>
+      </div>
+      <div class='question' id='part3_q3'>
+        <p><strong>Câu 3:</strong> Tổng số hạt proton, neutron và electron trong nguyên tử X là 82, trong đó tổng số hạt mang điện nhiều hơn số hạt không mang điện là 22. Nguyên tử X có tổng số hạt proton và neutron là:</p>
+        <div>Đáp án của bạn: <input type='text' id='part3_q3_input'></div>
+        <div class='explanation' id='part3_q3_result' data-answer='56'></div>
+      </div>
+    </div>
+    <div style='text-align:center; margin-top:30px;'>
+      <button id='submitBtn' onclick='gradeQuiz();'>Nộp bài</button>
+    </div>
+    <script>
+      function gradeQuiz() {
+         let score = 0, total = 0;
+         document.querySelectorAll('#part1 .question').forEach(function(q) {
+             total++;
+             let qid = q.id;
+             let selected = q.querySelector('input[name="' + qid + '"]:checked');
+             let correct = q.querySelector('.explanation').getAttribute('data-answer');
+             if (selected && selected.value === correct) {
+                 score++;
+                 q.querySelector('.explanation').innerHTML = '<span style="color:green;"><strong>Đúng (' + correct + ')</strong></span>';
+             } else {
+                 q.querySelector('.explanation').innerHTML = '<span style="color:red;"><strong>Sai. Đáp án đúng: ' + correct + '</strong></span>';
+             }
+         });
+         document.querySelectorAll('#part2 .question').forEach(function(q) {
+             total++;
+             let qid = q.id;
+             let selected = q.querySelectorAll('input[name="' + qid + '"]:checked');
+             let userAnswers = [];
+             selected.forEach(el => userAnswers.push(el.value));
+             let correct = q.querySelector('.explanation').getAttribute('data-answer').split(',');
+             userAnswers.sort(); correct.sort();
+             if (userAnswers.join() === correct.join()) {
+                 score++;
+                 q.querySelector('.explanation').innerHTML = '<span style="color:green;"><strong>Đúng (' + correct.join(',') + ')</strong></span>';
+             } else {
+                 q.querySelector('.explanation').innerHTML = '<span style="color:red;"><strong>Sai. Đáp án đúng: ' + correct.join(',') + '</strong></span>';
+             }
+         });
+         document.querySelectorAll('#part3 .question').forEach(function(q) {
+             total++;
+             let qid = q.id;
+             let userInput = document.getElementById(qid + '_input').value.trim();
+             let correct = q.querySelector('.explanation').getAttribute('data-answer');
+             if (userInput.toLowerCase() === correct.toLowerCase()) {
+                 score++;
+                 q.querySelector('.explanation').innerHTML = '<span style="color:green;"><strong>Đúng</strong></span>';
+             } else {
+                 q.querySelector('.explanation').innerHTML = '<span style="color:red;"><strong>Sai. Đáp án đúng: ' + correct + '</strong></span>';
+             }
+         });
+         document.querySelectorAll('#part4 .question').forEach(function(q) {
+             total++;
+             let allCorrect = true;
+             let rows = q.querySelectorAll('tr.match-row');
+             rows.forEach(function(row) {
+                 let correct = row.getAttribute('data-correct');
+                 let select = row.querySelector('select');
+                 if (select.value !== correct) { allCorrect = false; }
+             });
+             if (allCorrect) {
+                 q.querySelector('.explanation').innerHTML = '<span style="color:green;"><strong>Đúng</strong></span>';
+                 score++;
+             } else {
+                 let correctMapping = q.querySelector('.explanation').getAttribute('data-original');
+                 q.querySelector('.explanation').innerHTML = '<span style="color:red;"><strong>Sai. Đáp án đúng phải là:</strong></span><br><span style="color:red;"><strong>' + correctMapping + '</strong></span>';
+             }
+         });
+         document.getElementById('scoreDisplay').innerHTML = 'Tổng số điêm: ' + score + ' / ' + total;
+         document.querySelectorAll('input, select').forEach(inp => inp.disabled = true);
+         let sb = document.getElementById('submitBtn'); if(sb) sb.disabled = true;
+      }
+    </script>
+  </div>
+</body>
+</html>
