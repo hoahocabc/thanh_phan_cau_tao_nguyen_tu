@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang='vi'>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài tâp hóa học ABC</title>
+
+  <!-- Sử dụng Google Fonts cho giao diện hiện đại -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$']] },
+      chtml: { scale: 0.9 },
+      svg: { fontCache: 'global' }
+    };
+    function drop(ev) {
+      ev.preventDefault();
+      var data = ev.dataTransfer.getData("text");
+      var draggable = document.getElementById(data);
+      var dropZone = ev.target;
+      while (dropZone && !dropZone.classList.contains("dropzone") && dropZone.tagName !== "BODY") {
+        dropZone = dropZone.parentNode;
+      }
+      if (!dropZone) return;
+      var label = dropZone.querySelector(".drop-label");
+      if (label) {
+         if (label.nextSibling) {
+           dropZone.insertBefore(draggable, label.nextSibling);
+         } else {
+           dropZone.appendChild(draggable);
+         }
+      } else {
+         dropZone.appendChild(draggable);
+      }
+    }
+    function allowDrop(ev) { ev.preventDefault(); }
+    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+  </script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .top-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+    .score-box {
+      background: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-size: 1.1em;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 20px;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 1.8em;
+      color: #333;
+    }
+    .header h2 {
+      margin: 10px 0 0;
+      font-size: 1.2em;
+      color: #777;
+    }
+    .section {
+      margin-top: 30px;
+    }
+    .section h2 {
+      font-size: 1.4em;
+      margin-bottom: 20px;
+      color: #4285f4;
+    }
+    .question {
+      margin-bottom: 30px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #f2f2f2;
+    }
+    .question p {
+      margin: 0 0 10px 0;
+    }
+    .option {
+      margin: 5px 0;
+    }
+    .explanation {
+      margin-top: 10px;
+    }
+    button {
+      background: #4285f4;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    button:hover { background: #307cf1; }
+    /* Drag and drop */
+    .drag-drop-container {
+      display: flex;
+      gap: 10px;
+    }
+    .drag-column, .drop-column {
+      flex: 1;
+      background: #fff;
+      border: 1px dashed #ccc;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .draggable-item {
+      background: #e8f0fe;
+      border: 1px solid #c6dafc;
+      padding: 8px;
+      margin-bottom: 5px;
+      border-radius: 4px;
+      cursor: move;
+      text-align: center;
+    }
+    .dropzone {
+      min-height: 50px;
+      border: 1px dashed #aaa;
+      margin: 5px 0;
+      border-radius: 4px;
+      padding: 10px;
+      text-align: center;
+    }
+    .drop-label {
+      font-weight: bold;
+      color: #555;
+    }
+    /* Updated CSS for blanks in Part IV */
+    .blank-container {
+      display: inline;
+    }
+    .blank-container input.auto-expand, .blank-container span {
+      white-space: normal;
+      min-width: 60px;
+      height: 25px;
+      font-size: 18px;
+      vertical-align: baseline;
+      box-sizing: border-box;
+      overflow-wrap: break-word;
+    }
+    mjx-container[jax="CHTML"][display="true"] {
+      margin-top: 0 !important;
+      margin-bottom: -1.5em !important;
+    }
+    /* Media query cho smartphone */
+    @media only screen and (max-width: 600px) {
+      body { padding: 10px; font-size: 16px; }
+      .container { padding: 15px; }
+      .header h1 { font-size: 1.8em; }
+      .header h2 { font-size: 1.2em; }
+      .score-box { font-size: 1em; padding: 8px 12px; }
+    }
+  </style>
+
+</head>
+<body>
+  <div class='container'>
+    <div class='top-row'><div class='score-box' id='scoreDisplay'>Tổng số điểm:</div></div>
+    <div class='header'><h1>BÀI TẬP THÀNH PHẦN CẤU TẠO NGUYÊN TỬ</h1><h2>(HÓA HỌC ABC)</h2></div>
+<div class='section' id='part1' data-parttype='1'>
+<h2>Phần 1: Trắc nghiệm nhiều lựa chọn (có một phương án đúng)</h2>
+<div class='question' id='part1_q1'>
+<p><strong>Câu 1:</strong><br><br>Ai là người đầu tiên đưa ra ý tưởng về nguyên tử?</p>
+<div class='option'><label><input type='radio' name='part1_q1' value='A'> <strong>A.</strong>  Aristotle.</label></div>
+<div class='option'><label><input type='radio' name='part1_q1' value='B'> <strong>B.</strong>  Democritus.</label></div>
+<div class='option'><label><input type='radio' name='part1_q1' value='C'> <strong>C.</strong>  Dalton.</label></div>
+<div class='option'><label><input type='radio' name='part1_q1' value='D'> <strong>D.</strong>  Rutherford.</label></div>
+<div class='explanation' id='part1_q1_result' data-answer='B' data-solution=''></div>
+</div>
+<div class='question' id='part1_q2'>
+<p><strong>Câu 2:</strong><br><br>Electron được phát hiện bởi nhà khoa học nào?</p>
+<div class='option'><label><input type='radio' name='part1_q2' value='A'> <strong>A.</strong>  Rutherford.</label></div>
+<div class='option'><label><input type='radio' name='part1_q2' value='B'> <strong>B.</strong>  Chadwick.</label></div>
+<div class='option'><label><input type='radio' name='part1_q2' value='C'> <strong>C.</strong>  J.J. Thomson.</label></div>
+<div class='option'><label><input type='radio' name='part1_q2' value='D'> <strong>D.</strong>  Bohr.</label></div>
+<div class='explanation' id='part1_q2_result' data-answer='C' data-solution=''></div>
+</div>
+<div class='question' id='part1_q3'>
+<p><strong>Câu 3:</strong><br><br>Loại hạt nào dưới đây mang điện tích âm?</p>
+<div class='option'><label><input type='radio' name='part1_q3' value='A'> <strong>A.</strong>  Proton.</label></div>
+<div class='option'><label><input type='radio' name='part1_q3' value='B'> <strong>B.</strong>  Electron.</label></div>
+<div class='option'><label><input type='radio' name='part1_q3' value='C'> <strong>C.</strong>  Neutron.</label></div>
+<div class='option'><label><input type='radio' name='part1_q3' value='D'> <strong>D.</strong>  Hạt nhân.</label></div>
+<div class='explanation' id='part1_q3_result' data-answer='B' data-solution=''></div>
+</div>
+<div class='question' id='part1_q4'>
+<p><strong>Câu 4:</strong><br><br>Proton có điện tích bằng bao nhiêu?</p>
+<div class='option'><label><input type='radio' name='part1_q4' value='A'> <strong>A.</strong>  -1.</label></div>
+<div class='option'><label><input type='radio' name='part1_q4' value='B'> <strong>B.</strong>  0.</label></div>
+<div class='option'><label><input type='radio' name='part1_q4' value='C'> <strong>C.</strong>  +1.</label></div>
+<div class='option'><label><input type='radio' name='part1_q4' value='D'> <strong>D.</strong>  +2.</label></div>
+<div class='explanation' id='part1_q4_result' data-answer='C' data-solution=''></div>
+</div>
+<div class='question' id='part1_q5'>
+<p><strong>Câu 5:</strong><br><br>Khối lượng tương đối của neutron xấp xỉ là:</p>
+<div class='option'><label><input type='radio' name='part1_q5' value='A'> <strong>A.</strong>  0 u.</label></div>
+<div class='option'><label><input type='radio' name='part1_q5' value='B'> <strong>B.</strong>  1 u.</label></div>
+<div class='option'><label><input type='radio' name='part1_q5' value='C'> <strong>C.</strong>  1/1836 u.</label></div>
+<div class='option'><label><input type='radio' name='part1_q5' value='D'> <strong>D.</strong>  -1 u.</label></div>
+<div class='explanation' id='part1_q5_result' data-answer='B' data-solution=''></div>
+</div>
+<div class='question' id='part1_q6'>
+<p><strong>Câu 6:</strong><br><br>Tại sao nguyên tử trung hòa về điện?</p>
+<div class='option'><label><input type='radio' name='part1_q6' value='A'> <strong>A.</strong>  Vì số e = số n.</label></div>
+<div class='option'><label><input type='radio' name='part1_q6' value='B'> <strong>B.</strong>  Vì số p = số e.</label></div>
+<div class='option'><label><input type='radio' name='part1_q6' value='C'> <strong>C.</strong>  Vì số p = số n.</label></div>
+<div class='option'><label><input type='radio' name='part1_q6' value='D'> <strong>D.</strong>  Vì hạt nhân âm, vỏ dương.</label></div>
+<div class='explanation' id='part1_q6_result' data-answer='B' data-solution=''></div>
+</div>
+<div class='question' id='part1_q7'>
+<p><strong>Câu 7:</strong><br><br>Khối lượng nguyên tử chủ yếu tập trung ở</p>
+<div class='option'><label><input type='radio' name='part1_q7' value='A'> <strong>A.</strong>  electron.</label></div>
+<div class='option'><label><input type='radio' name='part1_q7' value='B'> <strong>B.</strong>  vỏ nguyên tử.</label></div>
+<div class='option'><label><input type='radio' name='part1_q7' value='C'> <strong>C.</strong>  hạt nhân.</label></div>
+<div class='option'><label><input type='radio' name='part1_q7' value='D'> <strong>D.</strong>  vỏ và hạt nhân.</label></div>
+<div class='explanation' id='part1_q7_result' data-answer='C' data-solution=''></div>
+</div>
+<div class='question' id='part1_q8'>
+<p><strong>Câu 8:</strong><br><br>Đơn vị đo khối lượng nguyên tử là:</p>
+<div class='option'><label><input type='radio' name='part1_q8' value='A'> <strong>A.</strong>  tấn.</label></div>
+<div class='option'><label><input type='radio' name='part1_q8' value='B'> <strong>B.</strong>  lít.</label></div>
+<div class='option'><label><input type='radio' name='part1_q8' value='C'> <strong>C.</strong>  u.</label></div>
+<div class='option'><label><input type='radio' name='part1_q8' value='D'> <strong>D.</strong>  mol.</label></div>
+<div class='explanation' id='part1_q8_result' data-answer='C' data-solution=''></div>
+</div>
+<div class='question' id='part1_q9'>
+<p><strong>Câu 9:</strong><br><br>Kích thước của nguyên tử thường vào khoảng</p>
+<div class='option'><label><input type='radio' name='part1_q9' value='A'> <strong>A.</strong>  0,1 nm.</label></div>
+<div class='option'><label><input type='radio' name='part1_q9' value='B'> <strong>B.</strong>  1 mm.</label></div>
+<div class='option'><label><input type='radio' name='part1_q9' value='C'> <strong>C.</strong>  1 µm.</label></div>
+<div class='option'><label><input type='radio' name='part1_q9' value='D'> <strong>D.</strong>  1 cm.</label></div>
+<div class='explanation' id='part1_q9_result' data-answer='A' data-solution=''></div>
+</div>
+<div class='question' id='part1_q10'>
+<p><strong>Câu 10:</strong><br><br>Loại hạt nào dưới đây không mang điện tích?</p>
+<div class='option'><label><input type='radio' name='part1_q10' value='A'> <strong>A.</strong>  Proton.</label></div>
+<div class='option'><label><input type='radio' name='part1_q10' value='B'> <strong>B.</strong>  Electron.</label></div>
+<div class='option'><label><input type='radio' name='part1_q10' value='C'> <strong>C.</strong>  Neutron.</label></div>
+<div class='option'><label><input type='radio' name='part1_q10' value='D'> <strong>D.</strong>  Neutron và proton.</label></div>
+<div class='explanation' id='part1_q10_result' data-answer='C' data-solution=''></div>
+</div>
+<div class='question' id='part1_q11'>
+<p><strong>Câu 11:</strong><br><br>Đổi 1u sang gam.</p>
+<div class='option'><label><input type='radio' name='part1_q11' value='A'> <strong>A.</strong>  1,6605.10⁻²⁴ g.</label></div>
+<div class='option'><label><input type='radio' name='part1_q11' value='B'> <strong>B.</strong>  1,6605.10⁻²⁷ g.</label></div>
+<div class='option'><label><input type='radio' name='part1_q11' value='C'> <strong>C.</strong>  9,1.10⁻³¹ g.</label></div>
+<div class='option'><label><input type='radio' name='part1_q11' value='D'> <strong>D.</strong>  1,6.10⁻¹⁹ g.</label></div>
+<div class='explanation' id='part1_q11_result' data-answer='A' data-solution=''></div>
+</div>
+<div class='question' id='part1_q12'>
+<p><strong>Câu 12:</strong><br><br>Tỉ lệ khối lượng proton : electron xấp xỉ là:</p>
+<div class='option'><label><input type='radio' name='part1_q12' value='A'> <strong>A.</strong>  1:1.</label></div>
+<div class='option'><label><input type='radio' name='part1_q12' value='B'> <strong>B.</strong>  1836:1.</label></div>
+<div class='option'><label><input type='radio' name='part1_q12' value='C'> <strong>C.</strong>  1:1836.</label></div>
+<div class='option'><label><input type='radio' name='part1_q12' value='D'> <strong>D.</strong>  1:100.</label></div>
+<div class='explanation' id='part1_q12_result' data-answer='B' data-solution=''></div>
+</div>
+<div class='question' id='part1_q13'>
+<p><strong>Câu 13:</strong><br><br>Số electron có trong 5,4 gam aluminium (nhôm)? <br>Cho số Avogadro ${{N}_{A}}=6,{{022.10}^{23}}$ và khối lượng mol của nhôm là 27.</p>
+<div class='option'><label><input type='radio' name='part1_q13' value='A'> <strong>A.</strong>  0,57.10²⁴ electron.</label></div>
+<div class='option'><label><input type='radio' name='part1_q13' value='B'> <strong>B.</strong>  1,57.10²⁴ electron.</label></div>
+<div class='option'><label><input type='radio' name='part1_q13' value='C'> <strong>C.</strong>  2,57.10²⁴ electron.</label></div>
+<div class='option'><label><input type='radio' name='part1_q13' value='D'> <strong>D.</strong>  3,57.10²⁴ electron.</label></div>
+<div class='explanation' id='part1_q13_result' data-answer='B' data-solution='%3Cbr%3ES%E1%BB%91%20mol%20nguy%C3%AAn%20t%E1%BB%AD%20Al%20trong%205%2C4%20gam%3A%3Cbr%3E%24%7B%7Bn%7D_%7BAl%7D%7D%3D%5Cfrac%7Bm%7D%7BM%7D%3D%5Cfrac%7B5%2C4%7D%7B27%7D%3D0%2C2mol%24%3Cbr%3ES%E1%BB%91%20nguy%C3%AAn%20t%E1%BB%AD%20Al%20trong%205%2C4g%3A%3Cbr%3ES%E1%BB%91%20nguy%C3%AAn%20t%E1%BB%AD%20%3D%200%2C2.6%2C022.10%C2%B2%C2%B3%20%3D%201%2C2044.10%C2%B2%C2%B3%20%20nguy%C3%AAn%20t%E1%BB%AD%3Cbr%3EAl%20c%C3%B3%20s%E1%BB%91%20hi%E1%BB%87u%20nguy%C3%AAn%20t%E1%BB%AD%20l%C3%A0%2013%20%E2%86%92%20m%E1%BB%97i%20nguy%C3%AAn%20t%E1%BB%AD%20Al%20c%C3%B3%2013%20electron%3Cbr%3ET%E1%BB%95ng%20s%E1%BB%91%20electron%20c%C3%B3%20trong%205%2C4g%20Al%20l%C3%A0%3A%3Cbr%3ES%E1%BB%91%20e%20%3D%2013.1%2C2044.10%C2%B2%C2%B3%20%20%3D%201%2C5657.10%C2%B2%E2%81%B4%20%20electron%3Cbr%3E'></div>
+</div>
+</div>
+<div class='section' id='part2' data-parttype='2'>
+<h2>Phần 2: Trắc nghiệm nhiều lựa chọn (có thể có nhiều đáp án đúng)</h2>
+<div class='question' id='part2_q1'>
+<p><strong>Câu 1:</strong><br><br>Những hạt nào sau đây có trong hạt nhân nguyên tử?</p>
+<div class='option'><label><input type='checkbox' name='part2_q1' value='A'> <strong>A.</strong>  Proton.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q1' value='B'> <strong>B.</strong>  Electron.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q1' value='C'> <strong>C.</strong>  Neutron.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q1' value='D'> <strong>D.</strong>  Photon.</label></div>
+<div class='explanation' id='part2_q1_result' data-answer='A,C' data-solution=''></div>
+</div>
+<div class='question' id='part2_q2'>
+<p><strong>Câu 2:</strong><br><br>Những hạt nào sau đây có khối lượng xấp xỉ 1u?</p>
+<div class='option'><label><input type='checkbox' name='part2_q2' value='A'> <strong>A.</strong>  Electron.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q2' value='B'> <strong>B.</strong>  Proton.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q2' value='C'> <strong>C.</strong>  Neutron.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q2' value='D'> <strong>D.</strong>  Hạt nhân.</label></div>
+<div class='explanation' id='part2_q2_result' data-answer='B,C' data-solution=''></div>
+</div>
+<div class='question' id='part2_q3'>
+<p><strong>Câu 3:</strong><br><br>Nguyên tử được cấu tạo từ những hạt nào dưới đây?</p>
+<div class='option'><label><input type='checkbox' name='part2_q3' value='A'> <strong>A.</strong>  Proton.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q3' value='B'> <strong>B.</strong>  Electron.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q3' value='C'> <strong>C.</strong>  Neutron.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q3' value='D'> <strong>D.</strong>  Photon.</label></div>
+<div class='explanation' id='part2_q3_result' data-answer='A,B,C' data-solution=''></div>
+</div>
+<div class='question' id='part2_q4'>
+<p><strong>Câu 4:</strong><br><br>Những nhận định đúng khi nói về neutron?</p>
+<div class='option'><label><input type='checkbox' name='part2_q4' value='A'> <strong>A.</strong>  Không mang điện.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q4' value='B'> <strong>B.</strong>  Nằm trong hạt nhân.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q4' value='C'> <strong>C.</strong>  Có khối lượng lớn hơn proton.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q4' value='D'> <strong>D.</strong>  Tham gia phản ứng hóa học.</label></div>
+<div class='explanation' id='part2_q4_result' data-answer='A,B,C' data-solution=''></div>
+</div>
+<div class='question' id='part2_q5'>
+<p><strong>Câu 5:</strong><br><br>Những phát biểu đúng về electron?</p>
+<div class='option'><label><input type='checkbox' name='part2_q5' value='A'> <strong>A.</strong>  Có điện tích âm.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q5' value='B'> <strong>B.</strong>  Không có khối lượng.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q5' value='C'> <strong>C.</strong>  Chuyển động quanh hạt nhân.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q5' value='D'> <strong>D.</strong>  Quyết định tính chất hóa học.</label></div>
+<div class='explanation' id='part2_q5_result' data-answer='A,C,D' data-solution=''></div>
+</div>
+<div class='question' id='part2_q6'>
+<p><strong>Câu 6:</strong><br><br>Những đơn vị có thể dùng để đo kích thước nguyên tử?</p>
+<div class='option'><label><input type='checkbox' name='part2_q6' value='A'> <strong>A.</strong>  nm.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q6' value='B'> <strong>B.</strong>  µm.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q6' value='C'> <strong>C.</strong>  u.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q6' value='D'> <strong>D.</strong>  pm.</label></div>
+<div class='explanation' id='part2_q6_result' data-answer='A,B,D' data-solution=''></div>
+</div>
+<div class='question' id='part2_q7'>
+<p><strong>Câu 7:</strong><br><br>Các nhà khoa học đã đóng góp vào mô hình nguyên tử?</p>
+<div class='option'><label><input type='checkbox' name='part2_q7' value='A'> <strong>A.</strong>  Dalton.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q7' value='B'> <strong>B.</strong>  Rutherford.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q7' value='C'> <strong>C.</strong>  Thomson.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q7' value='D'> <strong>D.</strong>  Einstein.</label></div>
+<div class='explanation' id='part2_q7_result' data-answer='A,B,C' data-solution=''></div>
+</div>
+<div class='question' id='part2_q8'>
+<p><strong>Câu 8:</strong><br><br>Những phát biểu đúng khi nói về nguyên tử?</p>
+<div class='option'><label><input type='checkbox' name='part2_q8' value='A'> <strong>A.</strong>  Luôn trung hòa điện.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q8' value='B'> <strong>B.</strong>  Có kích thước khoảng ${{10}^{-10}}m$.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q8' value='C'> <strong>C.</strong>  Không có khối lượng.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q8' value='D'> <strong>D.</strong>  Cấu tạo từ các hạt cơ bản.</label></div>
+<div class='explanation' id='part2_q8_result' data-answer='A,B,D' data-solution=''></div>
+</div>
+<div class='question' id='part2_q9'>
+<p><strong>Câu 9:</strong><br><br>Những loại hạt nào trong nguyên tử có điện tích?</p>
+<div class='option'><label><input type='checkbox' name='part2_q9' value='A'> <strong>A.</strong>  Proton.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q9' value='B'> <strong>B.</strong>  Electron.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q9' value='C'> <strong>C.</strong>  Neutron.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q9' value='D'> <strong>D.</strong>  Hạt nhân.</label></div>
+<div class='explanation' id='part2_q9_result' data-answer='A,B,D' data-solution=''></div>
+</div>
+<div class='question' id='part2_q10'>
+<p><strong>Câu 10:</strong><br><br>Đặc điểm của proton?<br></p>
+<div class='option'><label><input type='checkbox' name='part2_q10' value='A'> <strong>A.</strong>  Nằm trong hạt nhân.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q10' value='B'> <strong>B.</strong>  Mang điện tích dương.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q10' value='C'> <strong>C.</strong>  Có khối lượng nhỏ hơn neutron.</label></div>
+<div class='option'><label><input type='checkbox' name='part2_q10' value='D'> <strong>D.</strong>  Tham gia phản ứng hóa học.</label></div>
+<div class='explanation' id='part2_q10_result' data-answer='A,B,C' data-solution=''></div>
+</div>
+</div>
+<div class='section' id='part3' data-parttype='3'>
+<h2>Phần 3: Trắc nghiệm trả lời ngắn</h2>
+<div class='question' id='part3_q1'>
+<p><strong>Câu 1:</strong><br><br>Nguyên tử có 17 proton và 18 neutron. Hãy tính khối lượng nguyên tử tương đối.</p>
+<div>Đáp án của bạn: <input type='text' id='part3_q1_input' class='auto-expand' style='width:60px; height:25px; font-size:18px;' oninput="var canvas=document.createElement('canvas');var context=canvas.getContext('2d');context.font=window.getComputedStyle(this).font;var textWidth=context.measureText(this.value).width;this.style.width=Math.max(60, textWidth+10)+'px';"></div>
+<div class='explanation' id='part3_q1_result' data-answer=' 35u|| 35' data-solution='%3Cbr%3EKh%E1%BB%91i%20l%C6%B0%E1%BB%A3ng%20m%3Csub%3Ep%3C%2Fsub%3E%20%E2%89%88%20m%3Csub%3En%3C%2Fsub%3E%20%E2%89%88%201u.%3Cbr%3EKh%E1%BB%91i%20l%C6%B0%E1%BB%A3ng%20nguy%C3%AAn%20t%E1%BB%AD%20t%C6%B0%C6%A1ng%20%C4%91%E1%BB%91i%20l%C3%A0%3A%2017%20%2B%2018%20%3D%2035u'></div>
+</div>
+<div class='question' id='part3_q2'>
+<p><strong>Câu 2:</strong><br><br>Hạt nhân của nguyên tử nguyên tố A có 23 hạt, trong đó số hạt không mang điện là 12. Xác định số electron trong A.<br>(Đáp án ghi bằng số)</p>
+<div>Đáp án của bạn: <input type='text' id='part3_q2_input' class='auto-expand' style='width:60px; height:25px; font-size:18px;' oninput="var canvas=document.createElement('canvas');var context=canvas.getContext('2d');context.font=window.getComputedStyle(this).font;var textWidth=context.measureText(this.value).width;this.style.width=Math.max(60, textWidth+10)+'px';"></div>
+<div class='explanation' id='part3_q2_result' data-answer=' 11' data-solution='%3Cbr%3ES%E1%BB%91%20h%E1%BA%A1t%20kh%C3%B4ng%20mang%20%C4%91i%E1%BB%87n%20l%C3%A0%2012%20n%C3%AAn%20N%20%3D%2012.%3Cbr%3ET%E1%BB%95ng%20s%E1%BB%91%20h%E1%BA%A1t%20trong%20h%E1%BA%A1t%20nh%C3%A2n%20l%C3%A0%2023%3A%20P%20%2B%2012%20%3D%2023%3Cbr%3ET%C3%ADnh%20%C4%91%C6%B0%E1%BB%A3c%3A%20P%20%3D%2023%20-%2012%20%3D%2011%20%3Cbr%3ES%E1%BB%91%20e%20%3D%20s%E1%BB%91%20p%20n%C3%AAn%20s%E1%BB%91%20E%20%3D%2011'></div>
+</div>
+<div class='question' id='part3_q3'>
+<p><strong>Câu 3:</strong><br><br>Tính tổng số proton, neutron và electron trong một phân tử carbon dioxide (CO<sub>2</sub>). Biết trong phân tử này, nguyên tử C có 6 proton và 6 neutron; nguyên tử O có 8 proton và 8 neutron.<br>(Đáp án ghi bằng số)</p>
+<div>Đáp án của bạn: <input type='text' id='part3_q3_input' class='auto-expand' style='width:60px; height:25px; font-size:18px;' oninput="var canvas=document.createElement('canvas');var context=canvas.getContext('2d');context.font=window.getComputedStyle(this).font;var textWidth=context.measureText(this.value).width;this.style.width=Math.max(60, textWidth+10)+'px';"></div>
+<div class='explanation' id='part3_q3_result' data-answer=' 66' data-solution='%3Cbr%3EPh%C3%A2n%20t%E1%BB%AD%20CO%3Csub%3E2%3C%2Fsub%3E%20%C4%91%C6%B0%E1%BB%A3c%20t%E1%BA%A1o%20n%C3%AAn%20t%E1%BB%AB%201%20nguy%C3%AAn%20t%E1%BB%AD%20C%20v%C3%A0%202%20nguy%C3%AAn%20t%E1%BB%AD%20O.%3Cbr%3ENguy%C3%AAn%20t%E1%BB%AD%20C%20c%C3%B3%3A%20s%E1%BB%91%20p%20%3D%20s%E1%BB%91%20e%20%3D%206%3B%20nguy%C3%AAn%20t%E1%BB%AD%20O%20c%C3%B3%3A%20s%E1%BB%91%20p%20%3D%20s%E1%BB%91%20e%20%3D%208.%3Cbr%3ET%E1%BB%95ng%20s%E1%BB%91%20h%E1%BA%A1t%20proton%2C%20neutron%20v%C3%A0%20electron%20trong%20m%E1%BB%99t%20ph%C3%A2n%20t%E1%BB%AD%20carbon%20dioxide%20%28CO%3Csub%3E2%3C%2Fsub%3E%29%20l%C3%A0%3A%3Cbr%3E%286%20%2B%206%20%2B%206%29%20%2B%202%C3%97%288%20%2B%208%20%2B%208%20%29%20%3D%2066%20%28h%E1%BA%A1t%29.'></div>
+</div>
+<div class='question' id='part3_q4'>
+<p><strong>Câu 4:</strong><br><br>Tổng số hạt proton, neutron và electron trong hai nguyên tử X và Y là 96 hạt, trong đó tổng số hạt mang điện nhiều hơn tổng số hạt không mang điện là 32 hạt. Số hạt mang điện của nguyên tử Y nhiều hơn của nguyên tử X là 16. Tính tổng số proton trong nguyên tử Y.</p>
+<div>Đáp án của bạn: <input type='text' id='part3_q4_input' class='auto-expand' style='width:60px; height:25px; font-size:18px;' oninput="var canvas=document.createElement('canvas');var context=canvas.getContext('2d');context.font=window.getComputedStyle(this).font;var textWidth=context.measureText(this.value).width;this.style.width=Math.max(60, textWidth+10)+'px';"></div>
+<div class='explanation' id='part3_q4_result' data-answer=' 20|| 20 proton' data-solution='%3Cbr%3EG%E1%BB%8Di%20t%E1%BB%95ng%20s%E1%BB%91%20proton%2C%20s%E1%BB%91%20electron%20v%C3%A0%20s%E1%BB%91%20neutron%20trong%20hai%20nguy%C3%AAn%20t%E1%BB%AD%20X%20v%C3%A0%20Y%20l%E1%BA%A7n%20l%C6%B0%E1%BB%A3t%20l%C3%A0%20P%2C%20E%20v%C3%A0%20N.%20Trong%20%C4%91%C3%B3%20P%20%3D%20E.%3Cbr%3ETa%20c%C3%B3%20h%E1%BB%87%20ph%C6%B0%C6%A1ng%20tr%C3%ACnh%3A%3Cbr%3E%5C%5B%5Cleft%5C%7B%20%5Cbegin%7Balign%7D%3Cbr%3E%20%20%26%202P%2BN%3D96%20%5C%5C%20%3Cbr%3E%20%26%202P-N%3D32%20%5C%5C%20%3Cbr%3E%5Cend%7Balign%7D%20%5Cright.%5C%5D%3Cbr%3EGi%E1%BA%A3i%20h%E1%BB%87%20ta%20%C4%91%C6%B0%E1%BB%A3c%3A%20P%20%3D%20N%20%3D%2032%3Cbr%3ET%E1%BB%95ng%20s%E1%BB%91%20h%E1%BA%A1t%20proton%20trong%20X%20v%C3%A0%20Y%20l%C3%A0%2032%20%E2%87%92%20P%3Csub%3Ex%3C%2Fsub%3E%20%2B%20P%3Csub%3EY%3C%2Fsub%3E%20%3D%2032%20%281%29%3Cbr%3ES%E1%BB%91%20h%E1%BA%A1t%20mang%20%C4%91i%E1%BB%87n%20c%E1%BB%A7a%20nguy%C3%AAn%20t%E1%BB%AD%20Y%20nhi%E1%BB%81u%20h%C6%A1n%20c%E1%BB%A7a%20nguy%C3%AAn%20t%E1%BB%AD%20X%20l%C3%A0%2016%2C%20n%C3%AAn%20ta%20c%C3%B3%3A%3Cbr%3E%28P%3Csub%3EY%3C%2Fsub%3E%20%2B%20E%3Csub%3EY%3C%2Fsub%3E%29%20%E2%80%93%20%28P%3Csub%3EX%3C%2Fsub%3E%20%2B%20E%3Csub%3EX%3C%2Fsub%3E%29%20%3D%2016%20hay%202P%3Csub%3EY%3C%2Fsub%3E%20%E2%80%93%202P%3Csub%3EX%3C%2Fsub%3E%20%3D%2016%20%282%29%3Cbr%3ET%E1%BB%AB%20%281%29%20v%C3%A0%20%282%29%20gi%E1%BA%A3i%20h%E1%BB%87%20ph%C6%B0%C6%A1ng%20tr%C3%ACnh%20%C4%91%C6%B0%E1%BB%A3c%3A%3Cbr%3EP%3Csub%3EX%3C%2Fsub%3E%20%3D%2012%20v%C3%A0%20P%3Csub%3EY%3C%2Fsub%3E%20%3D%2020.'></div>
+</div>
+</div>
+<div class='section' id='part4' data-parttype='4'>
+<h2>Phần 4: Trắc nghiệm điền khuyết</h2>
+<div class='question' id='part4_q1'>
+<p><strong>Câu 1:</strong><br> <br>Electron có điện tích là <span class='blank-container'><input type='text' id='part4_q1_blank1' data-answer=' -1' class='auto-expand' style='width:60px;' oninput="var canvas=document.createElement('canvas');var context=canvas.getContext('2d');context.font=window.getComputedStyle(this).font;var textWidth=context.measureText(this.value).width;this.style.width=Math.max(60, textWidth+10)+'px';"></span> và có khối lượng rất nhỏ.</p>
+<div class='explanation' id='part4_q1_result' data-solution=''></div>
+</div>
+<div class='question' id='part4_q2'>
+<p><strong>Câu 2:</strong><br> <br>Khối lượng của nguyên tử chủ yếu tập trung ở <span class='blank-container'><input type='text' id='part4_q2_blank1' data-answer=' hạt nhân' class='auto-expand' style='width:60px;' oninput="var canvas=document.createElement('canvas');var context=canvas.getContext('2d');context.font=window.getComputedStyle(this).font;var textWidth=context.measureText(this.value).width;this.style.width=Math.max(60, textWidth+10)+'px';"></span>.</p>
+<div class='explanation' id='part4_q2_result' data-solution=''></div>
+</div>
+<div class='question' id='part4_q3'>
+<p><strong>Câu 3:</strong><br><br>Neutron là hạt <span class='blank-container'><input type='text' id='part4_q3_blank1' data-answer=' không' class='auto-expand' style='width:60px;' oninput="var canvas=document.createElement('canvas');var context=canvas.getContext('2d');context.font=window.getComputedStyle(this).font;var textWidth=context.measureText(this.value).width;this.style.width=Math.max(60, textWidth+10)+'px';"></span> mang điện và có khối lượng xấp xỉ <span class='blank-container'><input type='text' id='part4_q3_blank2' data-answer=' 1' class='auto-expand' style='width:60px;' oninput="var canvas=document.createElement('canvas');var context=canvas.getContext('2d');context.font=window.getComputedStyle(this).font;var textWidth=context.measureText(this.value).width;this.style.width=Math.max(60, textWidth+10)+'px';"></span> u.</p>
+<div class='explanation' id='part4_q3_result' data-solution=''></div>
+</div>
+<div class='question' id='part4_q4'>
+<p><strong>Câu 4:</strong><br> <br>Trong một nguyên tử trung hòa, số proton bằng số <span class='blank-container'><input type='text' id='part4_q4_blank1' data-answer=' electron|| e' class='auto-expand' style='width:60px;' oninput="var canvas=document.createElement('canvas');var context=canvas.getContext('2d');context.font=window.getComputedStyle(this).font;var textWidth=context.measureText(this.value).width;this.style.width=Math.max(60, textWidth+10)+'px';"></span>.</p>
+<div class='explanation' id='part4_q4_result' data-solution=''></div>
+</div>
+</div>
+<div class='section' id='part5' data-parttype='5'>
+<h2>Phần 5: Trắc nghiệm kéo - thả</h2>
+<div class='question' id='part5_q1'>
+<p class='question-content'><strong>Câu 1:</strong><br> <br>Ghép nhà khoa học với đóng góp tương ứng</p>
+<div class='drag-drop-container'>
+<div class='drag-column'>
+<div class='draggable-item' data-label='1' draggable='true' ondragstart='drag(event)' id='part5_q1_drag_0'>Dalton</div>
+<div class='draggable-item' data-label='2' draggable='true' ondragstart='drag(event)' id='part5_q1_drag_1'>Thomson</div>
+<div class='draggable-item' data-label='3' draggable='true' ondragstart='drag(event)' id='part5_q1_drag_2'>Rutherford</div>
+<div class='draggable-item' data-label='4' draggable='true' ondragstart='drag(event)' id='part5_q1_drag_3'>Chadwick</div>
+</div>
+<div class='drop-column'>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='A' id='part5_q1_drop_0' data-expected='2' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Tìm ra electron</div>
+</div>
+</div>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='B' id='part5_q1_drop_1' data-expected='4' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Tìm ra neutron</div>
+</div>
+</div>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='C' id='part5_q1_drop_2' data-expected='3' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Đưa ra mô hình hành tinh nguyên tử</div>
+</div>
+</div>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='D' id='part5_q1_drop_3' data-expected='1' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Đề xuất nguyên tử là hạt không thể chia nhỏ</div>
+</div>
+</div>
+</div>
+</div>
+<div class='explanation' id='part5_q1_result' data-answer-pairs='Dalton -- Đề xuất nguyên tử là hạt không thể chia nhỏ || Thomson -- Tìm ra electron || Rutherford -- Đưa ra mô hình hành tinh nguyên tử || Chadwick -- Tìm ra neutron' data-solution=''></div>
+</div>
+<div class='question' id='part5_q2'>
+<p class='question-content'><strong>Câu 2:</strong><br> <br>Ghép tên hạt với đặc điểm chính</p>
+<div class='drag-drop-container'>
+<div class='drag-column'>
+<div class='draggable-item' data-label='1' draggable='true' ondragstart='drag(event)' id='part5_q2_drag_0'>Electron</div>
+<div class='draggable-item' data-label='3' draggable='true' ondragstart='drag(event)' id='part5_q2_drag_1'>Neutron</div>
+<div class='draggable-item' data-label='2' draggable='true' ondragstart='drag(event)' id='part5_q2_drag_2'>Proton</div>
+</div>
+<div class='drop-column'>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='A' id='part5_q2_drop_0' data-expected='3' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Không mang điện</div>
+</div>
+</div>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='B' id='part5_q2_drop_1' data-expected='1' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Mang điện tích âm</div>
+</div>
+</div>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='C' id='part5_q2_drop_2' data-expected='2' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Mang điện tích dương</div>
+</div>
+</div>
+</div>
+</div>
+<div class='explanation' id='part5_q2_result' data-answer-pairs='Electron -- Mang điện tích âm || Proton -- Mang điện tích dương || Neutron -- Không mang điện' data-solution=''></div>
+</div>
+<div class='question' id='part5_q3'>
+<p class='question-content'><strong>Câu 3:</strong><br><br>Ghép tên hạt với khối lượng</p>
+<div class='drag-drop-container'>
+<div class='drag-column'>
+<div class='draggable-item' data-label='1' draggable='true' ondragstart='drag(event)' id='part5_q3_drag_0'>Proton</div>
+<div class='draggable-item' data-label='3' draggable='true' ondragstart='drag(event)' id='part5_q3_drag_1'>Electron</div>
+<div class='draggable-item' data-label='2' draggable='true' ondragstart='drag(event)' id='part5_q3_drag_2'>Neutron</div>
+</div>
+<div class='drop-column'>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='A' id='part5_q3_drop_0' data-expected='1, 2' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Khối lượng xấp xỉ 1 u</div>
+</div>
+</div>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='B' id='part5_q3_drop_1' data-expected='3' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Khối lượng rất nhỏ, gần bằng 0</div>
+</div>
+</div>
+</div>
+</div>
+<div class='explanation' id='part5_q3_result' data-answer-pairs='Proton -- Khối lượng xấp xỉ 1 u || Neutron -- Khối lượng xấp xỉ 1 u || Electron -- Khối lượng rất nhỏ, gần bằng 0' data-solution=''></div>
+</div>
+<div class='question' id='part5_q4'>
+<p class='question-content'><strong>Câu 4:</strong><br><br>Ghép hạt với vị trí trong nguyên tử</p>
+<div class='drag-drop-container'>
+<div class='drag-column'>
+<div class='draggable-item' data-label='2' draggable='true' ondragstart='drag(event)' id='part5_q4_drag_0'>Neutron</div>
+<div class='draggable-item' data-label='1' draggable='true' ondragstart='drag(event)' id='part5_q4_drag_1'>Proton</div>
+<div class='draggable-item' data-label='3' draggable='true' ondragstart='drag(event)' id='part5_q4_drag_2'>Electron</div>
+</div>
+<div class='drop-column'>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='A' id='part5_q4_drop_0' data-expected='3' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Nằm ngoài hạt nhân, chuyển động quanh hạt nhân</div>
+</div>
+</div>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='B' id='part5_q4_drop_1' data-expected='1, 2' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Nằm trong hạt nhân</div>
+</div>
+</div>
+</div>
+</div>
+<div class='explanation' id='part5_q4_result' data-answer-pairs='Proton -- Nằm trong hạt nhân || Neutron -- Nằm trong hạt nhân || Electron -- Nằm ngoài hạt nhân, chuyển động quanh hạt nhân' data-solution=''></div>
+</div>
+<div class='question' id='part5_q5'>
+<p class='question-content'><strong>Câu 5:</strong><br><br>Ghép tên hạt với ký hiệu</p>
+<div class='drag-drop-container'>
+<div class='drag-column'>
+<div class='draggable-item' data-label='1' draggable='true' ondragstart='drag(event)' id='part5_q5_drag_0'>Electron</div>
+<div class='draggable-item' data-label='3' draggable='true' ondragstart='drag(event)' id='part5_q5_drag_1'>Neutron</div>
+<div class='draggable-item' data-label='2' draggable='true' ondragstart='drag(event)' id='part5_q5_drag_2'>Proton</div>
+</div>
+<div class='drop-column'>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='A' id='part5_q5_drop_0' data-expected='1' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>e</div>
+</div>
+</div>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='B' id='part5_q5_drop_1' data-expected='2' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>p</div>
+</div>
+</div>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='C' id='part5_q5_drop_2' data-expected='3' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>n</div>
+</div>
+</div>
+</div>
+</div>
+<div class='explanation' id='part5_q5_result' data-answer-pairs='Electron -- e || Proton -- p || Neutron -- n' data-solution=''></div>
+</div>
+<div class='question' id='part5_q6'>
+<p class='question-content'><strong>Câu 6:</strong><br><br>Ghép thời gian với sự kiện khám phá</p>
+<div class='drag-drop-container'>
+<div class='drag-column'>
+<div class='draggable-item' data-label='2' draggable='true' ondragstart='drag(event)' id='part5_q6_drag_0'>Đầu thế kỉ 20</div>
+<div class='draggable-item' data-label='3' draggable='true' ondragstart='drag(event)' id='part5_q6_drag_1'>Năm 1932</div>
+<div class='draggable-item' data-label='1' draggable='true' ondragstart='drag(event)' id='part5_q6_drag_2'>Cuối thế kỉ 19</div>
+<div class='draggable-item' data-label='4' draggable='true' ondragstart='drag(event)' id='part5_q6_drag_3'>Đầu thế kỉ 19</div>
+</div>
+<div class='drop-column'>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='A' id='part5_q6_drop_0' data-expected='4' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Dalton đề xuất mô hình nguyên tử</div>
+</div>
+</div>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='B' id='part5_q6_drop_1' data-expected='1' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Thomson phát hiện electron</div>
+</div>
+</div>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='C' id='part5_q6_drop_2' data-expected='2' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Rutherford phát hiện hạt nhân nguyên tử</div>
+</div>
+</div>
+<div class='dropzone-wrapper'>
+<div class='dropzone' data-label='D' id='part5_q6_drop_3' data-expected='3' ondragover='allowDrop(event)' ondrop='drop(event)'>
+<div class='drop-label'>Chadwick tìm ra neutron</div>
+</div>
+</div>
+</div>
+</div>
+<div class='explanation' id='part5_q6_result' data-answer-pairs='Cuối thế kỉ 19 -- Thomson phát hiện electron || Đầu thế kỉ 20 -- Rutherford phát hiện hạt nhân nguyên tử || Năm 1932 -- Chadwick tìm ra neutron || Đầu thế kỉ 19 -- Dalton đề xuất mô hình nguyên tử' data-solution=''></div>
+</div>
+</div>
+
+    <div style='text-align:center; margin-top:30px;'>
+      <button id='submitBtn' onclick='gradeQuiz();'>Nộp bài</button>
+    </div>
+    <script>
+      function gradeQuiz() {
+         let score = 0, total = 0;
+         document.querySelectorAll('.section').forEach(function(section) {
+           let partType = section.getAttribute('data-parttype');
+           section.querySelectorAll('.question').forEach(function(q) {
+             total++;
+             let qid = q.id;
+             let feedback = "";
+             if (partType === "1") {
+               let selected = q.querySelector('input[name="' + qid + '"]:checked');
+               let correct = q.querySelector('.explanation').getAttribute('data-answer');
+               if (!selected) {
+                 feedback = '<span style="color:red;"><strong>Bạn chưa trả lời. Đáp án đúng: ' + correct + '</strong></span>';
+               } else if (selected.value === correct) {
+                 score++;
+                 feedback = '<span style="color:green;"><strong>Đúng (' + correct + ')</strong></span>';
+               } else {
+                 feedback = '<span style="color:red;"><strong>Sai. Đáp án đúng: ' + correct + '</strong></span>';
+               }
+             } else if (partType === "2") {
+               let selectedList = q.querySelectorAll('input[name="' + qid + '"]:checked');
+               if (selectedList.length === 0) {
+                 let correct = q.querySelector('.explanation').getAttribute('data-answer');
+                 feedback = '<span style="color:red;"><strong>Bạn chưa trả lời. Đáp án đúng: ' + correct + '</strong></span>';
+               } else {
+                 let userAnswers = [];
+                 selectedList.forEach(function(el) { userAnswers.push(el.value); });
+                 let correct = q.querySelector('.explanation').getAttribute('data-answer').split(',');
+                 userAnswers.sort(); correct.sort();
+                 if (userAnswers.join() === correct.join()) {
+                   score++;
+                   feedback = '<span style="color:green;"><strong>Đúng (' + correct.join(',') + ')</strong></span>';
+                 } else {
+                   feedback = '<span style="color:red;"><strong>Sai. Đáp án đúng: ' + correct.join(',') + '</strong></span>';
+                 }
+               }
+             } else if (partType === "3") {
+               let inputElem = document.getElementById(qid + '_input');
+               let userInput = inputElem.value.trim();
+               let correctData = q.querySelector('.explanation').getAttribute('data-answer');
+               let accepted = correctData.split('||').map(s => s.trim());
+               if (!userInput) {
+                 feedback = '<span style="color:red;"><strong>Bạn chưa trả lời. Đáp án đúng: ' + accepted.join(' hoặc ') + '</strong></span>';
+               } else {
+                 if (accepted.includes(userInput)) {
+                   score++;
+                   feedback = '<span style="color:green;"><strong>Đúng</strong></span>';
+                   inputElem.style.color = 'green';
+                 } else {
+                   feedback = '<span style="color:red;"><strong>Sai. Đáp án đúng: ' + accepted.join(' hoặc ') + '</strong></span>';
+                   inputElem.style.color = 'red';
+                 }
+                 inputElem.style.fontWeight = 'bold';
+                 inputElem.disabled = true;
+               }
+             } else if (partType === "4") {
+               let inputs = q.querySelectorAll('input.auto-expand');
+               let blankResults = [];
+               inputs.forEach(function(inp, index) {
+                 let accepted = inp.getAttribute('data-answer').split('||').map(s => s.trim());
+                 let userAnswer = inp.value.trim();
+                 if (userAnswer !== "") {
+                   if (accepted.includes(userAnswer)) {
+                     blankResults.push({blank: index+1, correct: true, answer: userAnswer, accepted: accepted});
+                   } else {
+                     blankResults.push({blank: index+1, correct: false, answer: userAnswer, accepted: accepted});
+                   }
+                 } else {
+                   blankResults.push({blank: index+1, answered: false, accepted: accepted});
+                 }
+               });
+               inputs.forEach(function(inp, index) {
+                 let res = blankResults[index];
+                 if (res.answered === false) { }
+                 else {
+                   let span = document.createElement('span');
+                   span.style.fontWeight = 'bold';
+                   if (res.correct) {
+                     span.style.color = 'green';
+                     span.textContent = res.answer;
+                   } else {
+                     span.style.color = 'red';
+                     span.textContent = res.answer;
+                   }
+                   inp.parentNode.replaceChild(span, inp);
+                 }
+               });
+               let wrongBlanks = [];
+               let unansweredBlanks = [];
+               blankResults.forEach(function(r) {
+                 if (r.answered === false) { unansweredBlanks.push(r.blank); }
+                 else if (!r.correct) { wrongBlanks.push(r.blank); }
+               });
+               if (wrongBlanks.length === 0 && unansweredBlanks.length === 0) {
+                 feedback = '<span style="color:green; font-weight:bold;">Đúng</span>';
+                 score++;
+               } else {
+                 let answerList = "";
+                 blankResults.forEach(function(r) {
+                   answerList += r.blank + ') ' + r.accepted.join(', hoặc ') + '<br>';
+                 });
+                 feedback = '<span style="color:red; font-weight:bold;">Sai.';
+                 if (wrongBlanks.length > 0) {
+                   feedback += ' Bạn trả lời sai vị trí ' + wrongBlanks.join(', ') + '.';
+                 }
+                 if (unansweredBlanks.length > 0) {
+                   feedback += ' Bạn chưa trả lời vị trí ' + unansweredBlanks.join(', ') + '.';
+                 }
+                 feedback += '<br>Đáp án đúng là:<br>' + answerList + '</span>';
+               }
+             } else if (partType === "5") {
+               let correctForQuestion = true;
+               q.querySelectorAll('.dropzone').forEach(function(dropZone) {
+                 let expected = dropZone.getAttribute('data-expected').trim();
+                 let userItems = Array.from(dropZone.querySelectorAll('.draggable-item')).map(e => e.getAttribute('data-label')).sort();
+                 let expectedItems = expected ? expected.split(',').map(s => s.trim()).sort() : [];
+                 if (JSON.stringify(userItems) !== JSON.stringify(expectedItems)) {
+                   correctForQuestion = false;
+                 }
+               });
+               if (correctForQuestion) {
+                 feedback = '<span style="color:green; font-weight:bold;">Đúng</span>';
+                 score++;
+               } else {
+                 let answerPairs = q.querySelector('.explanation').getAttribute('data-answer-pairs');
+                 feedback = '<span style="color:red; font-weight:bold;">Sai. Đáp án đúng là:<br>' + answerPairs.replace(/ \|\| /g, "<br>") + '</span>';
+               }
+             }
+             let expl = q.querySelector('.explanation');
+             expl.innerHTML = feedback;
+             let encodedSolution = expl.getAttribute('data-solution');
+             let solution = encodedSolution ? decodeURIComponent(encodedSolution) : "";
+             let cleanedSolution = solution.replace(/<br\s*\/?>/gi, '').trim();
+             if (cleanedSolution !== "") {
+                 expl.innerHTML += '<div style="margin-top:10px;"><strong>Lời giải:</strong></div><div>' + solution + '</div>';
+             }
+             expl.style.display = "block";
+           });
+         });
+         document.getElementById('scoreDisplay').innerHTML = 'Tổng số điểm: ' + score + ' / ' + total;
+         document.querySelectorAll('input, select').forEach(function(inp) { inp.disabled = true; });
+         let sb = document.getElementById('submitBtn'); if(sb) sb.disabled = true;
+         MathJax.typesetPromise();
+      }
+    </script>
+  </div>
+</body>
+</html>
